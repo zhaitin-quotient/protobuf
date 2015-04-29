@@ -43,10 +43,11 @@ namespace cpp {
 
 // Generator options:
 struct Options {
-  Options() : safe_boundary_check(false) {
+  Options() : safe_boundary_check(false), gen_cxx11(false) {
   }
   string dllexport_decl;
   bool safe_boundary_check;
+  bool gen_cxx11;
 };
 
 }  // namespace cpp

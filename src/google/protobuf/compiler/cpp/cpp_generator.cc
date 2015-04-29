@@ -89,6 +89,8 @@ bool CppGenerator::Generate(const FileDescriptor* file,
       file_options.dllexport_decl = options[i].second;
     } else if (options[i].first == "safe_boundary_check") {
       file_options.safe_boundary_check = true;
+    } else if (options[i].first == "cxx11") {
+      file_options.gen_cxx11 = true;
     } else {
       *error = "Unknown generator option: " + options[i].first;
       return false;

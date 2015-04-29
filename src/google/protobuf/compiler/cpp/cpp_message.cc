@@ -687,6 +687,14 @@ GenerateClassDefinition(io::Printer* printer) {
     "  return *this;\n"
     "}\n"
     "\n");
+  if (options_.gen_cxx11) {
+    printer->Print(vars,  "$classname$($classname$&& from);\n"
+      "\n"
+      "inline $classname$& operator=($classname$&& from) {\n"
+      "  InternalSwap(&from);\n"
+      "  return *this;\n"
+      "}\n\n");
+  }
 
   if (PreserveUnknownFields(descriptor_)) {
     if (UseUnknownFieldSet(descriptor_->file())) {
@@ -1890,8 +1898,7 @@ GenerateStructors(io::Printer* printer) {
     "$classname$::$classname$(const $classname$& from)\n"
     "  : $superclass$()",
     "classname", classname_,
-    "superclass", superclass,
-    "full_name", descriptor_->full_name());
+    "superclass", superclass);
   if (UseUnknownFieldSet(descriptor_->file())) {
     printer->Print(
         ",\n    _internal_metadata_(NULL) {\n");
@@ -1904,9 +1911,28 @@ GenerateStructors(io::Printer* printer) {
     "  // @@protoc_insertion_point(copy_constructor:$full_name$)\n"
     "}\n"
     "\n",
-    "classname", classname_,
-    "superclass", superclass,
     "full_name", descriptor_->full_name());
+
+  if (options_.gen_cxx11) {
+    printer->Print(
+    "$classname$::$classname$($classname$&& from)\n"
+    "  : $superclass$()",
+    "classname", classname_,
+    "superclass", superclass);
+    if (UseUnknownFieldSet(descriptor_->file())) {
+      printer->Print(
+          ",\n    _internal_metadata_(NULL) {\n");
+    } else if (!UseUnknownFieldSet(descriptor_->file())) {
+      printer->Print(",\n    _arena_ptr_(NULL) {\n");
+    }
+    printer->Print(
+      "  SharedCtor();\n"
+      "  InternalSwap(&from);\n"
+      "  // @@protoc_insertion_point(move_constructor:$full_name$)\n"
+      "}\n"
+      "\n",
+      "full_name", descriptor_->full_name());
+  }
 
   // Generate the shared constructor code.
   GenerateSharedConstructorCode(printer);
