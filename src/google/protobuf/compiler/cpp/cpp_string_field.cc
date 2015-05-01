@@ -79,7 +79,7 @@ void SetStringVariables(const FieldDescriptor* descriptor,
 StringFieldGenerator::
 StringFieldGenerator(const FieldDescriptor* descriptor,
                      const Options& options)
-  : descriptor_(descriptor) {
+  : descriptor_(descriptor), gen_cxx11_(options.gen_cxx11) {
   SetStringVariables(descriptor, &variables_, options);
 }
 
@@ -148,6 +148,12 @@ GenerateAccessorDeclarations(io::Printer* printer) const {
     "::std::string* mutable_$name$()$deprecation$;\n"
     "::std::string* $release_name$()$deprecation$;\n"
     "void set_allocated_$name$(::std::string* $name$)$deprecation$;\n");
+  if (gen_cxx11_) {
+    printer->Print(variables_,
+      "void set_$name$(::std::string&& value) {\n"
+      "  mutable_$name$()->swap(value);\n"
+      "}\n");
+  }
   if (SupportsArenas(descriptor_)) {
     printer->Print(variables_,
       "::std::string* unsafe_arena_release_$name$()$deprecation$;\n"
@@ -665,7 +671,7 @@ GenerateMergeFromCodedStream(io::Printer* printer) const {
 RepeatedStringFieldGenerator::
 RepeatedStringFieldGenerator(const FieldDescriptor* descriptor,
                              const Options& options)
-  : descriptor_(descriptor) {
+  : descriptor_(descriptor), gen_cxx11_(options.gen_cxx11) {
   SetStringVariables(descriptor, &variables_, options);
 }
 
@@ -704,7 +710,12 @@ GenerateAccessorDeclarations(io::Printer* printer) const {
     "void add_$name$(const char* value)$deprecation$;\n"
     "void add_$name$(const $pointer_type$* value, size_t size)"
                  "$deprecation$;\n");
-
+  if (gen_cxx11_) {
+    printer->Print(variables_,
+      "void add_$name$(::std::string&& value) {\n"
+      "  add_$name$()->swap(value);\n"
+      "}\n");
+  }
   printer->Print(variables_,
     "const ::google::protobuf::RepeatedPtrField< ::std::string>& $name$() const"
                  "$deprecation$;\n"
