@@ -710,6 +710,7 @@ GenerateAccessorDeclarations(io::Printer* printer) const {
     "void add_$name$(const char* value)$deprecation$;\n"
     "void add_$name$(const $pointer_type$* value, size_t size)"
                  "$deprecation$;\n");
+
   if (gen_cxx11_) {
     printer->Print(variables_,
       "void add_$name$(::std::string&& value) {\n"

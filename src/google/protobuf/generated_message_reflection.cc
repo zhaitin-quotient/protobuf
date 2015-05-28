@@ -1168,6 +1168,33 @@ void GeneratedMessageReflection::SetString(
 }
 
 
+
+void GeneratedMessageReflection::SetString(
+    Message* message, const FieldDescriptor* field,
+    string&& value) const {
+  USAGE_CHECK_ALL(SetString, SINGULAR, STRING);
+  if (field->is_extension()) {
+    return MutableExtensionSet(message)->SetString(field->number(),
+                                                   field->type(), value, field);
+  } else {
+    switch (field->options().ctype()) {
+      default:  // TODO(kenton):  Support other string reps.
+      case FieldOptions::STRING: {
+        const string* default_ptr =
+            &DefaultRaw<ArenaStringPtr>(field).Get(NULL);
+        if (field->containing_oneof() && !HasOneofField(*message, field)) {
+          ClearOneof(message, field->containing_oneof());
+          MutableField<ArenaStringPtr>(message, field)->UnsafeSetDefault(
+              default_ptr);
+        }
+        MutableField<ArenaStringPtr>(message, field)->Mutable(default_ptr,
+            GetArena(message))->swap(value);
+        break;
+      }
+    }
+  }
+}
+
 string GeneratedMessageReflection::GetRepeatedString(
     const Message& message, const FieldDescriptor* field, int index) const {
   USAGE_CHECK_ALL(GetRepeatedString, REPEATED, STRING);

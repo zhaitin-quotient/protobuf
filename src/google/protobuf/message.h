@@ -550,6 +550,9 @@ class LIBPROTOBUF_EXPORT Reflection {
   virtual void SetString(Message* message,
                          const FieldDescriptor* field,
                          const string& value) const = 0;
+  virtual void SetString(Message* message,
+                         const FieldDescriptor* field,
+                         string&& value) const = 0;
   virtual void SetEnum  (Message* message,
                          const FieldDescriptor* field,
                          const EnumValueDescriptor* value) const = 0;

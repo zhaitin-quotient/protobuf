@@ -278,6 +278,10 @@ class LIBPROTOBUF_EXPORT GeneratedMessageReflection : public Reflection {
   void SetString(Message* message,
                  const FieldDescriptor* field,
                  const string& value) const;
+  void SetString(Message* message,
+                 const FieldDescriptor* field,
+                 string&& value) const override;
+
   void SetEnum  (Message* message, const FieldDescriptor* field,
                  const EnumValueDescriptor* value) const;
   void SetEnumValue(Message* message, const FieldDescriptor* field,
