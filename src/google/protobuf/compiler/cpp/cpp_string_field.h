@@ -73,6 +73,7 @@ class StringFieldGenerator : public FieldGenerator {
   const FieldDescriptor* descriptor_;
   map<string, string> variables_;
 
+  bool gen_cxx11_;
  private:
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(StringFieldGenerator);
 };
@@ -120,6 +121,7 @@ class RepeatedStringFieldGenerator : public FieldGenerator {
  private:
   const FieldDescriptor* descriptor_;
   map<string, string> variables_;
+  bool gen_cxx11_;
 
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(RepeatedStringFieldGenerator);
 };

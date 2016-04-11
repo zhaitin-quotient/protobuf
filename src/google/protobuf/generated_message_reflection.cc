@@ -1142,6 +1142,14 @@ const string& GeneratedMessageReflection::GetStringReference(
 void GeneratedMessageReflection::SetString(
     Message* message, const FieldDescriptor* field,
     const string& value) const {
+  SetString(message, field, string(value));  // Delegate to move version.
+}
+
+
+
+void GeneratedMessageReflection::SetString(
+    Message* message, const FieldDescriptor* field,
+    string&& value) const {
   USAGE_CHECK_ALL(SetString, SINGULAR, STRING);
   if (field->is_extension()) {
     return MutableExtensionSet(message)->SetString(field->number(),
@@ -1157,14 +1165,13 @@ void GeneratedMessageReflection::SetString(
           MutableField<ArenaStringPtr>(message, field)->UnsafeSetDefault(
               default_ptr);
         }
-        MutableField<ArenaStringPtr>(message, field)->Set(default_ptr,
-            value, GetArena(message));
+        MutableField<ArenaStringPtr>(message, field)->Mutable(default_ptr,
+            GetArena(message))->swap(value);
         break;
       }
     }
   }
 }
-
 
 string GeneratedMessageReflection::GetRepeatedString(
     const Message& message, const FieldDescriptor* field, int index) const {
