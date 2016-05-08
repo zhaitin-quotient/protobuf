@@ -243,6 +243,15 @@ GenerateMembers(io::Printer* printer) const {
     "    return s;\n"
     "  }\n"
     "}\n");
+
+  WriteUbimoSetterComment(printer, descriptor_);
+  printer->Print(variables_,
+    "$deprecation$public void set$capitalized_name$(java.lang.String value) {\n"
+    " $null_check$"
+    "  $set_has_field_bit_builder$\n"
+    "  $name$_ = value;\n"
+    "}\n");
+
   WriteFieldDocComment(printer, descriptor_);
   printer->Print(variables_,
     "$deprecation$public com.google.protobuf.ByteString\n"
@@ -259,6 +268,7 @@ GenerateMembers(io::Printer* printer) const {
     "  }\n"
     "}\n");
 }
+
 
 void ImmutableStringFieldGenerator::
 GenerateBuilderMembers(io::Printer* printer) const {

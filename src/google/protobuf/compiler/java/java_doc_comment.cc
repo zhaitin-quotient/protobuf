@@ -227,6 +227,12 @@ void WriteMethodDocComment(io::Printer* printer,
   printer->Print(" */\n");
 }
 
+void WriteUbimoSetterComment(io::Printer* printer, const FieldDescriptor* field) {
+  printer->Print("/**\n"
+                 " * Ubimo specific mutable setter\n"
+                 "*/\n");
+}
+
 }  // namespace java
 }  // namespace compiler
 }  // namespace protobuf

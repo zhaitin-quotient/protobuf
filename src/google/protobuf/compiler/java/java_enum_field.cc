@@ -201,6 +201,16 @@ GenerateMembers(io::Printer* printer) const {
     "  $type$ result = $type$.valueOf($name$_);\n"
     "  return result == null ? $unknown$ : result;\n"
     "}\n");
+
+  WriteUbimoSetterComment(printer, descriptor_);
+  printer->Print(variables_,
+    "$deprecation$public void set$capitalized_name$($type$ value) {\n"
+    "  if (value == null) {\n"
+    "    throw new NullPointerException();\n"
+    "  }\n"
+    "  $set_has_field_bit_builder$\n"
+    "  $name$_ = value.getNumber();\n"
+    "}\n");
 }
 
 void ImmutableEnumFieldGenerator::

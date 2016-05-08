@@ -205,6 +205,13 @@ GenerateMembers(io::Printer* printer) const {
     "$deprecation$public $type$ get$capitalized_name$() {\n"
     "  return $name$_;\n"
     "}\n");
+
+  WriteUbimoSetterComment(printer, descriptor_);
+  printer->Print(variables_,
+    "$deprecation$public void set$capitalized_name$($type$ value) {\n"
+    "  $set_has_field_bit_builder$\n"
+    "  $name$_ = value;\n"
+    "}\n");
 }
 
 void ImmutablePrimitiveFieldGenerator::
