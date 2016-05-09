@@ -248,7 +248,7 @@ GenerateMembers(io::Printer* printer) const {
   printer->Print(variables_,
     "$deprecation$public void set$capitalized_name$(java.lang.String value) {\n"
     " $null_check$"
-    "  $set_has_field_bit_builder$\n"
+    "  $set_has_field_bit_message$\n"
     "  $name$_ = value;\n"
     "}\n");
 

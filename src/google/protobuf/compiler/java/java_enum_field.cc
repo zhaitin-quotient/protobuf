@@ -208,7 +208,7 @@ GenerateMembers(io::Printer* printer) const {
     "  if (value == null) {\n"
     "    throw new NullPointerException();\n"
     "  }\n"
-    "  $set_has_field_bit_builder$\n"
+    "  $set_has_field_bit_message$\n"
     "  $name$_ = value.getNumber();\n"
     "}\n");
 }
