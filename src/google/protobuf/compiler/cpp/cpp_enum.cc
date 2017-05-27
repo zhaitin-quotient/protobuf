@@ -81,12 +81,33 @@ void EnumGenerator::GenerateDefinition(io::Printer* printer) {
   vars["classname"] = classname_;
   vars["short_name"] = descriptor_->name();
   vars["enumbase"] = classname_ + (options_.proto_h ? " : int" : "");
-
-  printer->Print(vars, "enum $enumbase$ {\n");
-  printer->Indent();
+  string& enumcls = vars["enumcls"];
 
   const EnumValueDescriptor* min_value = descriptor_->value(0);
   const EnumValueDescriptor* max_value = descriptor_->value(0);
+
+  for (int i = 0; i < descriptor_->value_count(); i++) {
+    if (descriptor_->value(i)->number() < min_value->number()) {
+      min_value = descriptor_->value(i);
+    }
+    if (descriptor_->value(i)->number() > max_value->number()) {
+      max_value = descriptor_->value(i);
+    }
+  }
+
+  if (options_.gen_cxx11) {
+    if (min_value->number() < 0) {
+      enumcls = ": int32_t";
+    } else if (max_value->number() >= (1 << 16)) {
+      enumcls = ": uint32_t";
+    } else if (max_value->number() >= 256) {
+      enumcls = ": uint16_t";
+    } else {
+      enumcls = ": uint8_t";
+    }
+  }
+  printer->Print(vars, "enum $enumbase$ $enumcls$ {\n");
+  printer->Indent();
 
   for (int i = 0; i < descriptor_->value_count(); i++) {
     vars["name"] = EnumValueName(descriptor_->value(i));
@@ -100,12 +121,7 @@ void EnumGenerator::GenerateDefinition(io::Printer* printer) {
     if (i > 0) printer->Print(",\n");
     printer->Print(vars, "$prefix$$name$ = $number$");
 
-    if (descriptor_->value(i)->number() < min_value->number()) {
-      min_value = descriptor_->value(i);
-    }
-    if (descriptor_->value(i)->number() > max_value->number()) {
-      max_value = descriptor_->value(i);
-    }
+
   }
 
   if (HasPreservingUnknownEnumSemantics(descriptor_->file())) {
