@@ -96,14 +96,12 @@ void EnumGenerator::GenerateDefinition(io::Printer* printer) {
   }
 
   if (options_.gen_cxx11) {
-    if (min_value->number() < 0) {
+    if (min_value->number() < 0 || max_value->number() > (1 << 15) - 1) {
       enumcls = ": int32_t";
-    } else if (max_value->number() >= (1 << 16)) {
-      enumcls = ": uint32_t";
-    } else if (max_value->number() >= 256) {
-      enumcls = ": uint16_t";
+    } else if (max_value->number() > 127) {
+      enumcls = ": int16_t";
     } else {
-      enumcls = ": uint8_t";
+      enumcls = ": char";
     }
   }
   printer->Print(vars, "enum $enumbase$ $enumcls$ {\n");
