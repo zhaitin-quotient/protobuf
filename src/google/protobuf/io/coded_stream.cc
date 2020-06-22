@@ -206,7 +206,7 @@ int CodedInputStream::BytesUntilTotalBytesLimit() const {
 void CodedInputStream::PrintTotalBytesLimitError() {
   GOOGLE_LOG(ERROR) << "A protocol message was rejected because it was too "
                 "big (more than " << total_bytes_limit_
-             << " bytes).  To increase the limit (or to disable these "
+             << " bytes).  To increase the limit 1111 (or to disable these "
                 "warnings), see CodedInputStream::SetTotalBytesLimit() "
                 "in google/protobuf/io/coded_stream.h.";
 }
