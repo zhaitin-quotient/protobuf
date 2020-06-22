@@ -611,7 +611,7 @@ class LIBPROTOBUF_EXPORT CodedInputStream {
 
   static const int kDefaultTotalBytesLimit = 2000 << 20;  // 2GB
 
-  static const int kDefaultTotalBytesWarningThreshold = 32 << 20;  // 32MB
+  static const int kDefaultTotalBytesWarningThreshold = 2000 << 20;  // 2GB
 
   static int default_recursion_limit_;  // 100 by default.
 };
